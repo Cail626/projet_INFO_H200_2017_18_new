@@ -1,0 +1,17 @@
+package Objects;
+
+public class BlockUnbreakable extends Block {
+
+    ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
+
+    public BlockUnbreakable(int X, int Y) {
+        super(X, Y, 0, 11);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////<diverseMethods>
+
+    @Override
+    public void activate() {
+
+    }
+}

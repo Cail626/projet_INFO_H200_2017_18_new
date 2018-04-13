@@ -1,0 +1,8 @@
+size
+20
+gameObject(id,x,y)
+2
+1 2 1
+1 1 2
+option
+exitEast
