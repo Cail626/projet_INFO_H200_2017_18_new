@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 public abstract class Character extends GameObject implements Directable {
 
-    int life;
-    int direction;
-    int force;
-    ArrayList<InventoryObject> inventory;
-    int sizeMaxInventory;
-    int maxLife;
+    protected int life;
+    protected int direction;
+    protected int force;
+    protected ArrayList<InventoryObject> inventory;
+    protected int sizeMaxInventory;
+    protected int maxLife;
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
