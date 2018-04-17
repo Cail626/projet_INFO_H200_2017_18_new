@@ -9,7 +9,7 @@ public abstract class InventoryObject extends GameObject{
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
-    public InventoryObject(int X, int Y, int color, int id, String description, Player p) {
+    public InventoryObject(int X, int Y, int color, int id, String description) {
         super(X, Y, color, id);
         this.description = description;
     }

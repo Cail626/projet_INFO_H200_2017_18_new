@@ -1,0 +1,17 @@
+package Objects;
+
+public class BlockInactive extends Block {
+
+    ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
+
+    public BlockInactive(int X, int Y) {
+        super(X, Y, 0, 11);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////<diverseMethods>
+
+    @Override
+    public void activate() {
+    }
+
+}

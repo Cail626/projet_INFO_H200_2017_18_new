@@ -4,18 +4,16 @@ import Moving.Player;
 
 public abstract class Consumable extends InventoryObject{
 
-    protected Player p;
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
-    public Consumable(int X, int Y, int color, int id, String description, Player p) {
-        super(X, Y, color, id, description, p);
-        this.p = p;
+    public Consumable(int X, int Y, int color, int id, String description) {
+        super(X, Y, color, id, description);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////<diverseMethods>
 
-    public void consume(){}
+    public void consume(Player p){}
 
     @Override
     public boolean isObstacle() {

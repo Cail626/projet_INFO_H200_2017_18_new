@@ -8,14 +8,14 @@ public class HealingConsumable extends Consumable{
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
-    public HealingConsumable(int X, int Y, int color, int id, String description, int healingPower, Player p) {
-        super(X, Y, color, id, description, p);
+    public HealingConsumable(int X, int Y, int color, int id, String description, int healingPower) {
+        super(X, Y, color, id, description);
         this.healingPower = healingPower;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////<diverseMethods>
 
-    public void consume(){
+    public void consume(Player p){
         p.modifyLife(healingPower);
     }
 
