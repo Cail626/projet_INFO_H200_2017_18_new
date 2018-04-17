@@ -1,8 +1,9 @@
 package Model;
 
+import Moving.*;
+import Moving.Character;
 import Objects.*;
 import View.Window;
-import Moving.Player;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Game implements DeletableObserver {
     private Player player;
     private Window window;
     private int size = 20;
-    private int numberOfBreakableBlocks = 10;
+    //private int numberOfBreakableBlocks = 10;
     private int playerNumber = 1;
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
@@ -22,7 +23,7 @@ public class Game implements DeletableObserver {
         this.window = window;
 
         // Creating one Player at position (10,10)
-        player = new Player(10, 10, 3, 5, 5, new ArrayList<>(), 3, playerNumber, 1, 0);
+        player = new Warrior(10, 10, 3, 5, 5, new ArrayList<>(), 3, playerNumber, 1, 0);
         objects.add(player);
 
         // Map building
@@ -34,6 +35,7 @@ public class Game implements DeletableObserver {
     private void buildMap(String file, Player player){
 
         String text = "";
+
         try{
             BufferedReader in = new BufferedReader(new FileReader(file));
 
@@ -56,16 +58,25 @@ public class Game implements DeletableObserver {
 
             // Creating consumables
             for(int i = 0; i < 4; i++){
-                Consumable potion = new HealingConsumable(5+i,2,2, 5, "potion1", 1, player);
+                Consumable potion = new HealingConsumable(5+i,2,2, 5, "potion1", 1);
                 potion.attachDeletable(this);
                 objects.add(potion);
             }
-            Consumable potion2 = new BoostConsumable(6,3,3, 5, "potion2", "force", 2, player);
+            Consumable potion2 = new BoostConsumable(6,3,3, 5, "potion2", "force", 2);
             potion2.attachDeletable(this);
             objects.add(potion2);
-            Consumable potion3 = new BoostConsumable(7,3,4, 5, "potion2", "life", 2, player);
-            potion3.attachDeletable(this);
-            objects.add(potion3);
+            Consumable potion3 = new BoostConsumable(7,3,4, 5, "potion2", "life", 2);
+
+            Weapon weapon1 = new Weapon(16, 16, 6, 9, "staff", 3);
+            weapon1.attachDeletable(this);
+            objects.add(weapon1);
+
+            ArrayList<InventoryObject> loot = new ArrayList<>();
+            loot.add(potion3);
+
+            // Creating monsters
+            Character monster1 = new Monster(15,15, 5, 5, 5, 5, 6, loot, 3, 6, 2);
+            objects.add(monster1);
 
             window.setGameObjects(this.getGameObjects());
             in.close();
@@ -104,11 +115,11 @@ public class Game implements DeletableObserver {
         text = in.readLine().trim();
         if ("exitEast".compareTo(text) == 0) {
             for (int i = 0; i < size; i++) {
-                objects.add(new BlockUnbreakable(i, 0));
-                objects.add(new BlockUnbreakable(0, i));
-                objects.add(new BlockUnbreakable(i, size - 1));
+                objects.add(new BlockInactive(i, 0));
+                objects.add(new BlockInactive(0, i));
+                objects.add(new BlockInactive(i, size - 1));
                 if(i!= size/2){
-                    objects.add(new BlockUnbreakable(size - 1, i));
+                    objects.add(new BlockInactive(size - 1, i));
                 }
             }
         }
@@ -116,7 +127,7 @@ public class Game implements DeletableObserver {
 
     ////////////////////////////////////////////////////////////////////////////////////////<characterMethods>
 
-    public void moveCharacter(int x, int y, int characterNumber) {
+    synchronized public void moveCharacter(int x, int y, int characterNumber) {
         Player player = ((Player) objects.get(characterNumber));
         int nextX = player.getPosX() + x;
         int nextY = player.getPosY() + y;
