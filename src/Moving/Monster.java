@@ -1,10 +1,12 @@
 package Moving;
 
+import Model.Activable;
+import Model.Deletable;
 import Objects.InventoryObject;
 
 import java.util.ArrayList;
 
-public class Monster extends Character implements Runnable{
+public class Monster extends Character implements Runnable, Deletable, Activable{
 
     private int speed;
     private int viewRange;

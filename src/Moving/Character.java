@@ -48,12 +48,12 @@ public abstract class Character extends GameObject implements Directable {
 
     @Override
     public boolean isObstacle() {
-        return false;
+        return true;
     }
 
     public void modifyLife(int change){
-        if (life + change <= maxLife) {
-            this.life = life + change;
+        if (getLife() + change <= getMaxLife()) {
+            setLife(getLife() + change);
         }else{
             System.out.println("Points de vie au maximum !");
         }
@@ -106,6 +106,10 @@ public abstract class Character extends GameObject implements Directable {
 
     public int getSizeMaxInventory(){
         return sizeMaxInventory;
+    }
+
+    public int getMaxLife(){
+        return maxLife;
     }
 
     public ArrayList<InventoryObject> getInventory(){
