@@ -2,6 +2,7 @@ package Moving;
 
 import Model.Activable;
 import Model.Deletable;
+import Model.Game;
 import Objects.InventoryObject;
 
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ public class Monster extends Character implements Runnable, Deletable, Activable
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
-    public Monster(int X, int Y, int life, int maxLife, int force, int speed, int viewRange, ArrayList<InventoryObject> inventory, int sizeMaxInventory, int characterNumber, int color) {
-        super(X, Y, life, maxLife, force, inventory, sizeMaxInventory, characterNumber, color);
+    public Monster(int X, int Y, int life, int maxLife, int force, int speed, int viewRange, ArrayList<InventoryObject> inventory, int sizeMaxInventory, int characterNumber, int color, Game game) {
+        super(X, Y, life, maxLife, force, inventory, sizeMaxInventory, characterNumber, color, game);
         this.speed = speed;
         this.viewRange = viewRange;
     }

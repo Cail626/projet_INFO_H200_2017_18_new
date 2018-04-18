@@ -1,5 +1,6 @@
 package Moving;
 
+import Model.Game;
 import Objects.InventoryObject;
 
 import java.util.ArrayList;
@@ -10,8 +11,8 @@ public class Mage extends Player {
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
-    public Mage(int X, int Y, int life, int maxLife, int force, int blastRange, ArrayList<InventoryObject> inventory, int sizeMaxInventory, int characterNumber, int color, int exp) {
-        super(X, Y, life, maxLife, force, inventory, sizeMaxInventory, characterNumber, color, exp);
+    public Mage(int X, int Y, int life, int maxLife, int force, int blastRange, ArrayList<InventoryObject> inventory, int sizeMaxInventory, int characterNumber, int color, int exp, Game game) {
+        super(X, Y, life, maxLife, force, inventory, sizeMaxInventory, characterNumber, color, exp, game);
         this.blastRange = blastRange;
     }
 

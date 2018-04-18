@@ -1,17 +1,18 @@
 package Moving;
 
+import Model.Game;
 import Objects.InventoryObject;
 
 import java.util.ArrayList;
 
-public class Player extends Character {
+public abstract class Player extends Character {
 
-    private int exp;
+    protected int exp;
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
-    public Player(int X, int Y, int life, int maxLife, int force, ArrayList<InventoryObject> inventory, int sizeMaxInventory, int characterNumber, int color, int exp) {
-        super(X, Y, life, maxLife, force, inventory, sizeMaxInventory, characterNumber, color);
+    public Player(int X, int Y, int life, int maxLife, int force, ArrayList<InventoryObject> inventory, int sizeMaxInventory, int characterNumber, int color, int exp, Game game) {
+        super(X, Y, life, maxLife, force, inventory, sizeMaxInventory, characterNumber, color, game);
         this.exp = exp;
     }
 
