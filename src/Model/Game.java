@@ -23,7 +23,7 @@ public class Game implements DeletableObserver {
         this.window = window;
 
         // Creating one Player at position (10,10)
-        player = new Warrior(10, 10, 3, 5, 5, new ArrayList<>(), 3, playerNumber, 1, 0);
+        player = new Warrior(10, 10, 3, 5, 5, new ArrayList<>(), 3, playerNumber, 1, 0, this);
         objects.add(player);
 
         // Map building
@@ -75,7 +75,7 @@ public class Game implements DeletableObserver {
             loot.add(potion3);
 
             // Creating monsters
-            Character monster1 = new Monster(15,15, 5, 5, 5, 5, 6, loot, 3, 6, 2);
+            Character monster1 = new Monster(15,15, 5, 5, 5, 5, 6, loot, 3, 6, 2, this);
             objects.add(monster1);
 
             window.setGameObjects(this.getGameObjects());
@@ -83,7 +83,7 @@ public class Game implements DeletableObserver {
 
         } catch(FileNotFoundException e){
             System.out.println(e);
-        } catch( IOException e){
+        } catch(IOException e){
             System.out.println(e);
         }
         notifyView();
@@ -127,63 +127,6 @@ public class Game implements DeletableObserver {
 
     ////////////////////////////////////////////////////////////////////////////////////////<characterMethods>
 
-    synchronized public void moveCharacter(int x, int y, int characterNumber) {
-        Player player = ((Player) objects.get(characterNumber));
-        int nextX = player.getPosX() + x;
-        int nextY = player.getPosY() + y;
-
-        boolean obstacle = false;
-        for (GameObject object : objects) {
-            if (object.isAtPosition(nextX, nextY)) {
-                obstacle = object.isObstacle();
-            }
-            if (obstacle == true) {
-                break;
-            }
-        }
-        player.rotate(x, y);
-        if (obstacle == false) {
-            player.move(x, y);
-        }
-        //teste si on quitte la map
-        if (nextX == (size - 1) || nextY == (size - 1) ){
-            System.out.println("map quitte");
-        }
-        notifyView();
-    }
-
-    public void action(int playerNumber) {
-        Activable aimedObject = null;
-		for(GameObject object : objects){
-			if(object.isAtPosition(player.getFrontX(),player.getFrontY())){
-			    if(object instanceof Activable){
-			        aimedObject =  object;
-			    }
-			}
-		}
-		if(aimedObject != null){
-		    if(aimedObject instanceof InventoryObject){
-		        pickUp(aimedObject);
-            }else {
-                aimedObject.activate();
-                notifyView();
-            }
-		}
-
-    }
-
-    private void pickUp(Activable aimedObject){
-        int sizeMax = player.getSizeMaxInventory();
-        int number = player.getSizeInventory();
-        if(number < sizeMax){
-            player.setInventory((InventoryObject) aimedObject);
-            aimedObject.activate();
-            notifyView();
-        }else{
-            System.out.println("Inventaire plein !");
-        }
-    }
-
     public void playerPos(int playerNumber) {
         Player player = ((Player) objects.get(playerNumber));
         System.out.println(player.getPosX() + ":" + player.getPosY());
@@ -193,11 +136,10 @@ public class Game implements DeletableObserver {
     ////////////////////////////////////////////////////////////////////////////////////////<windowMethods>
 
     public boolean switchInventory(){
-        boolean inventoryState = window.switchInventory();
-        return inventoryState;
+        return window.switchInventory();
     }
 
-    private void notifyView() {
+    public void notifyView() {
         window.update();
     }
 
@@ -220,6 +162,14 @@ public class Game implements DeletableObserver {
 
     public ArrayList<GameObject> getGameObjects() {
         return this.objects;
+    }
+
+    public Player getPlayer(){
+        return player;
+    }
+
+    public int getSize(){
+        return size;
     }
 
 }
