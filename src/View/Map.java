@@ -1,11 +1,17 @@
 package View;
 
 import Model.Directable;
+import Moving.Player;
 import Objects.GameObject;
+import Objects.InventoryObject;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -14,15 +20,20 @@ public class Map extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private ArrayList<GameObject> objects = null;
+    private ArrayList<InventoryObject> inventory = null;
+    private Player player;
     private boolean inventoryState;
     private int posIc[]= {1,2};
 
     private final int numInvY = 2;
     private final int numInvX = 5;
-    private final int invWidth = 1000;
+    private final int invWidth = 1000/3*2;
     private final int invHeight = 255;
     //taille de l'icone
     private final int side = 60;
+    //Nombre d'éléments dans l'inventaire
+    private int inventoryEmp; 
+    private Font font;
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
@@ -31,12 +42,14 @@ public class Map extends JPanel {
         this.requestFocusInWindow();
         posIc[0] = numInvX/2 + 1;
         posIc[1] = numInvY/2 + 1;
+        font = new Font("TimesRoman", Font.PLAIN, 32);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////<paintMethods>
 
     public void paint(Graphics g) {
-
+    	
+    	g.setFont(font);
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), getHeight() );
         for (int i = 0; i < 20; i++) { // Virer la valeur 20 et parametrer ca
@@ -101,27 +114,65 @@ public class Map extends JPanel {
             }
         }
         if( getInventoryState() == true){
-            //on charge l'image du fond de l'intentaire
-            Image image = getToolkit().getImage("inventory.jpg");
-            g.drawImage(image, 0, 3*invHeight, invWidth, invHeight, this);
-            image = getToolkit().getImage("icone.jpg");
-            //on dessine le nombre d'emplacements d'inventaire suivant x et y
-            for(int i=0; i<(numInvX*numInvY); i++){
-                int xic = i%numInvX + 1;
-                int yic = i/numInvX + 1;
-                g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
-            }
-            int xic = posIc[0];
-            int yic = posIc[1];
-            //on dessine l'icone sélectionnée
-            image = getToolkit().getImage("icone_select.jpg");
-            g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
-        }
+        	paintInventory(g);
+           }
 
+    }
+    
+    //copié collé : https://java.developpez.com/faq/gui?page=Les-images#Comment-combiner-deux-images
+    public static BufferedImage CombineImage(BufferedImage image1, BufferedImage image2){ 
+    	Graphics2D g2d = image1.createGraphics(); 
+    	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+    	                RenderingHints.VALUE_ANTIALIAS_ON); 
+    	g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, 
+    	                RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY); 
+      
+    	g2d.drawImage(image2, 0, 0, null); 
+      
+    	g2d.dispose(); 
+      
+    	return image1 ; 
+    }
+    
+    private void paintInventory(Graphics g){
+    	//on charge l'image du fond de l'intentaire
+    	
+    	////////////// PARTIE GAUCHE
+        Image image = getToolkit().getImage("inventory.jpg");
+        g.drawImage(image, 0, 3*invHeight, invWidth, invHeight, this);
+        image = getToolkit().getImage("icone.jpg");
+        //on dessine le nombre d'emplacements d'inventaire suivant x et y
+        //ainsi que les elements d'inventaire s'y trouvant
+        inventoryEmp = inventory.size();
+        for(int i=0; i<(numInvX*numInvY); i++){
+        	int xic = i%numInvX + 1;
+            int yic = i/numInvX + 1;
+            image = getToolkit().getImage("icone.jpg");
+            g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
+            if(i<inventoryEmp){
+        		image = getToolkit().getImage(inventory.get(i).getAddImage());
+        		g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
+        	}
+        }
+        int xic = posIc[0];
+        int yic = posIc[1];
+        //on dessine l'icone sélectionnée
+        image = getToolkit().getImage("icone_select.jpg");
+        g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
+        
+        ////////////// PARTIE DROITE
+        image = getToolkit().getImage("inventoryPlayer.jpg");
+        g.drawImage(image, invWidth, 3*invHeight, 1000-invWidth, invHeight, this);
+        String textLive = "LIFE: " + player.getLife() + "/" + player.getMaxLife();
+        g.drawString(textLive, invWidth + (1000-invWidth)*2/5, 3*invHeight+ invHeight/7);
+        String textStrengh = "Strengh: " + player.getForce();
+        g.drawString(textStrengh, invWidth + (1000-invWidth)*2/5, 3*invHeight+ invHeight*2/7);
+        String textWeapon = "Weapon: " ;//A ajouter l'arme du joueur
+        g.drawString(textWeapon, invWidth + (1000-invWidth)*2/5, 3*invHeight+ invHeight*3/7);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////<movingMethods>
-
+    
     //on déplace l'icone sélectionnée
     public void moveIc(int direction){
         switch(direction){
@@ -152,17 +203,6 @@ public class Map extends JPanel {
         }
     }
 
-    //On change l'affichage de l'inventaire
-    public boolean switchInventoryState(){
-        if(inventoryState == true){
-            inventoryState = false;
-        }
-        else{
-            inventoryState = true;
-        }
-        return inventoryState;
-    }
-
     public void redraw() {
         this.repaint();
     }
@@ -172,11 +212,25 @@ public class Map extends JPanel {
     public void setObjects(ArrayList<GameObject> objects) {
         this.objects = objects;
     }
+    
+    public void setPlayer(Player player){
+    	this.player = player;
+    	this.inventory = player.getInventory();
+    }
+    
+   //On défini l'affichage de l'inventaire
+    public void setInventoryState(boolean inventoryState){
+        this.inventoryState = inventoryState;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////<getMethods>
 
     public boolean getInventoryState(){
         return inventoryState;
+    }
+    
+    public int[] getPosIc(){
+    	return this.posIc;
     }
 
 }
