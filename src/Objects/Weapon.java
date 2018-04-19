@@ -11,22 +11,26 @@ public class Weapon extends InventoryObject{
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
     public Weapon(int x, int y, int color, int id, String description, int bonus){
-        super(x, y, color, id, description);
+        super(x, y, color, id, description, description + ".png");
         this.bonus = bonus;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////<diverseMethods>
 
-    public void equip(Player p){
-        if(super.getDescription() == "staff" && p instanceof Mage){
+    //renvoie si oui ou non le joueur peut s'équiper de cette arme
+    public boolean equip(Player p){
+        boolean result = true;
+    	if(super.getDescription() == "staff" && p instanceof Mage){
             ((Mage) p).setBlastRange(((Mage) p).getBlastRange() + bonus);
         }else if(super.getDescription() == "sword"){
             p.setForce(p.getForce() + bonus);
         }else if(super.getDescription() == "axe" && p instanceof Warrior){
             p.setForce(p.getForce() + bonus);
         }else{
-            System.out.println("Vous ne pouvez pas équiper cette arme !");
+        	result = false;
+            System.out.println("Vous ne pouvez pas equiper cette arme !");
         }
+        return result;
     }
 
     @Override
