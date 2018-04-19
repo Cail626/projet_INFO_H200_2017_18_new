@@ -1,5 +1,6 @@
 package View;
 
+
 import java.awt.Color;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -8,11 +9,12 @@ import javax.swing.JFrame;
 
 import Objects.GameObject;
 
+import Moving.Player;
 
 public class Window {
 
     private Map map = new Map();
-
+    
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
     public Window() {
@@ -35,13 +37,12 @@ public class Window {
         this.map.redraw();
     }
 
-    public boolean switchInventory(){
-        boolean inventoryState = map.switchInventoryState();
-        this.map.redraw();
-        return inventoryState;
-    }
-
     ////////////////////////////////////////////////////////////////////////////////////////<setMethods>
+    
+    public void setInventoryState(boolean inventoryState){
+        map.setInventoryState(inventoryState);
+        this.map.redraw();
+    }
 
     public void setKeyListener(KeyListener keyboard) {
         this.map.addKeyListener(keyboard);
@@ -50,5 +51,15 @@ public class Window {
     public void setGameObjects(ArrayList<GameObject> objects) {
         this.map.setObjects(objects);
         this.map.redraw();
+    }
+    
+    public void setPlayer(Player player) {
+    	this.map.setPlayer(player);
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////<getMethods>
+    
+    public int[] getPosIc(){
+    	return map.getPosIc();
     }
 }
