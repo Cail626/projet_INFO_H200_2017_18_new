@@ -5,13 +5,11 @@ import java.awt.event.KeyListener;
 
 import Model.Game;
 import Model.Directable;
-import Moving.Player;
 
 public class Keyboard implements KeyListener {
 
     private Game game;
-    private boolean inventoryState;
-    private Player p;
+    private boolean inventoryOn;
 
     private static final int player = 0;
 
@@ -19,7 +17,6 @@ public class Keyboard implements KeyListener {
 
     public Keyboard(Game game) {
         this.game = game;
-        this.p = game.getPlayer();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////<KeyMethods>
@@ -28,22 +25,22 @@ public class Keyboard implements KeyListener {
     public void keyPressed(KeyEvent event) {
         int key = event.getKeyCode();
 
-        if(! inventoryState){
+        if(inventoryOn == false){
             switch (key) {
                 case KeyEvent.VK_RIGHT:
-                    p.moveCharacter(1, 0);
+                    game.moveCharacter(1, 0, player);
                     break;
                 case KeyEvent.VK_LEFT:
-                    p.moveCharacter(-1, 0);
+                    game.moveCharacter(-1, 0, player);
                     break;
                 case KeyEvent.VK_DOWN:
-                    p.moveCharacter(0, 1);
+                    game.moveCharacter(0, 1, player);
                     break;
                 case KeyEvent.VK_UP:
-                    p.moveCharacter(0, -1);
+                    game.moveCharacter(0, -1, player);
                     break;
                 case KeyEvent.VK_SPACE:
-                    p.action();
+                    game.action(player);
                     break;
                 case KeyEvent.VK_P:
                     game.playerPos(player);
@@ -65,7 +62,7 @@ public class Keyboard implements KeyListener {
                     game.moveIc(Directable.NORTH);
                     break;
                 case KeyEvent.VK_SPACE:
-                    p.action();
+                    game.useItem(player);
                     break;
             }
         }
@@ -80,7 +77,13 @@ public class Keyboard implements KeyListener {
         int key = event.getKeyCode();
         switch (key) {
             case KeyEvent.VK_I:
-                inventoryState = game.switchInventory();
+            	if (inventoryOn == true){
+            		inventoryOn = false;
+            	}
+            	else{
+            		inventoryOn = true;
+            	}
+            	game.setInventoryState(inventoryOn);
                 break;
         }
     }
