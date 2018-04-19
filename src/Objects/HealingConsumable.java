@@ -1,6 +1,7 @@
 package Objects;
 
 import Moving.Player;
+import java.awt.Image;
 
 public class HealingConsumable extends Consumable{
 
@@ -9,7 +10,7 @@ public class HealingConsumable extends Consumable{
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
     public HealingConsumable(int X, int Y, int color, int id, String description, int healingPower) {
-        super(X, Y, color, id, description);
+        super(X, Y, color, id, description, "healingPotion.png");
         this.healingPower = healingPower;
     }
 
