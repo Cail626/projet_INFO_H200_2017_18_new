@@ -1,5 +1,7 @@
 package Objects;
 
+import java.util.function.Supplier;
+
 import Moving.Player;
 
 public class BoostConsumable extends Consumable{
@@ -10,9 +12,10 @@ public class BoostConsumable extends Consumable{
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
     public BoostConsumable(int X, int Y, int color, int id, String description, String boostType, int boostLength) {
-        super(X, Y, color, id, description);
+    	super(X, Y, color, id, description, "boostPotion.png");
         this.boostType = boostType;
         this.boostLength = boostLength;
+        
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////<diverseMethods
