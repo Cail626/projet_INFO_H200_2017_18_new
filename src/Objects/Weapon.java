@@ -22,16 +22,28 @@ public class Weapon extends InventoryObject{
         boolean result = true;
     	if(super.getDescription() == "staff" && p instanceof Mage){
             ((Mage) p).setBlastRange(((Mage) p).getBlastRange() + bonus);
+            p.setWeaponEquip(this);
         }else if(super.getDescription() == "sword"){
             p.setForce(p.getForce() + bonus);
+            p.setWeaponEquip(this);
         }else if(super.getDescription() == "axe" && p instanceof Warrior){
             p.setForce(p.getForce() + bonus);
+            p.setWeaponEquip(this);
         }else{
         	result = false;
             System.out.println("Vous ne pouvez pas equiper cette arme !");
         }
         return result;
     }
+    
+    public void unequip(Player p){
+    if(super.getDescription() == "staff"){
+          ((Mage) p).setBlastRange(((Mage) p).getBlastRange() - bonus);
+      }else if(super.getDescription() == "sword" || super.getDescription() == "axe"){
+          p.setForce(p.getForce() - bonus);
+      }
+    p.setWeaponEquip(null);
+  }
 
     @Override
     public boolean isObstacle() {
