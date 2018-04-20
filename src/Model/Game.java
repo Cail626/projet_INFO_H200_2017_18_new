@@ -71,6 +71,10 @@ public class Game implements DeletableObserver {
             Weapon weapon1 = new Weapon(16, 16, 6, 9, "staff", 3);
             weapon1.attachDeletable(this);
             objects.add(weapon1);
+            
+            Weapon weapon2 = new Weapon(17, 16, 6, 9, "axe", 2);
+            weapon2.attachDeletable(this);
+            objects.add(weapon2);
 
             ArrayList<InventoryObject> loot = new ArrayList<InventoryObject>();
             loot.add(potion3);
