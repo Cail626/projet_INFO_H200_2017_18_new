@@ -11,6 +11,8 @@ public class Player extends Character {
     private int exp;
     //Position de l'item que le joueur posssède dans son inventaire
     private int itemInHand[];
+    private Weapon weaponEquip = null;
+    private InventoryObject objInHand;
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
@@ -27,20 +29,33 @@ public class Player extends Character {
     }
     
     public void useItem() {
-    	int empItem = itemInHand[0] - 1 + (itemInHand[1]-1)*5;
-    	if(inventory.size() > empItem){
-    		InventoryObject objInHand = inventory.get(empItem);
-        	if (objInHand instanceof Consumable) {
-        		((Consumable)objInHand).consume(this);
-        		inventory.remove(empItem);
-        	}
-        	else if (objInHand instanceof Weapon) {
-        		if( ((Weapon)objInHand).equip(this) == true){
-        			inventory.remove(empItem);
-        		}
-        	}
-    	}
+      int empItem;
+      if (itemInHand[0] != this.sizeMaxInventory/2 + 1){
+        empItem = itemInHand[0] - 1 + (itemInHand[1]-1)*5;
+      }
+      else{
+        empItem = 1000; //emplacement de l'objet équipé
+      }
+    	if( empItem == 1000 && weaponEquip != null){
+        if(inventory.size() != sizeMaxInventory){
+          this.inventory.add(weaponEquip);
+          this.weaponEquip.unequip(this);
+        }
+      }
+    	else if(inventory.size() > empItem){
+    	   objInHand = inventory.get(empItem);
+         if (objInHand instanceof Consumable) {
+         	((Consumable)objInHand).consume(this);
+         	inventory.remove(empItem);
+         }
+         else if (objInHand instanceof Weapon) {
+         	if( ((Weapon)objInHand).equip(this) == true){
+         		inventory.remove(empItem);
+         	}
+         }
+      }
     }
+    
 
     ////////////////////////////////////////////////////////////////////////////////////////<setMethods>
 
@@ -55,6 +70,10 @@ public class Player extends Character {
     public void setItemInHand(int itemInHand[]){
     	this.itemInHand = itemInHand;
     }
+    
+    public void setWeaponEquip( Weapon weaponEquip){
+    	this.weaponEquip = weaponEquip;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////<getMethods>
 
@@ -64,5 +83,9 @@ public class Player extends Character {
    
     public int[] getItemInHand(){
     	return this.itemInHand;
+    }
+    
+    public Weapon getWeaponEquip(){
+    	return this.weaponEquip;
     }
 }
