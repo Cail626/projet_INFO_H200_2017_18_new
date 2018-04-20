@@ -23,8 +23,7 @@ public class Map extends JPanel {
     private ArrayList<InventoryObject> inventory = null;
     private Player player;
     private boolean inventoryState;
-    private int posIc[]= {1,2};
-
+    
     private final int numInvY = 2;
     private final int numInvX = 5;
     private final int invWidth = 1000/3*2;
@@ -34,6 +33,8 @@ public class Map extends JPanel {
     //Nombre d'éléments dans l'inventaire
     private int inventoryEmp; 
     private Font font;
+  //si posIc = {numInvY, numInvX+1} on est ds la selection d'arme
+    private int posIc[]= {numInvY/2 + 1,numInvX/2 + 1};
 
     ////////////////////////////////////////////////////////////////////////////////////////<Constructor>
 
@@ -147,18 +148,15 @@ public class Map extends JPanel {
         for(int i=0; i<(numInvX*numInvY); i++){
         	int xic = i%numInvX + 1;
             int yic = i/numInvX + 1;
-            image = getToolkit().getImage("icone.jpg");
-            g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
             if(i<inventoryEmp){
         		image = getToolkit().getImage(inventory.get(i).getAddImage());
         		g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
         	}
+            else{
+            	image = getToolkit().getImage("icone.jpg");
+                g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
+            }
         }
-        int xic = posIc[0];
-        int yic = posIc[1];
-        //on dessine l'icone sélectionnée
-        image = getToolkit().getImage("icone_select.jpg");
-        g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
         
         ////////////// PARTIE DROITE
         image = getToolkit().getImage("inventoryPlayer.jpg");
@@ -169,6 +167,24 @@ public class Map extends JPanel {
         g.drawString(textStrengh, invWidth + (1000-invWidth)*2/5, 3*invHeight+ invHeight*2/7);
         String textWeapon = "Weapon: " ;//A ajouter l'arme du joueur
         g.drawString(textWeapon, invWidth + (1000-invWidth)*2/5, 3*invHeight+ invHeight*3/7);
+        if(player.getWeaponEquip() == null){
+	        image = getToolkit().getImage("icone.jpg");
+	    }
+        else{
+        	image = getToolkit().getImage(player.getWeaponEquip().getAddImage());
+        }
+        g.drawImage(image, invWidth + (1000-invWidth)*1/2, 3*invHeight+ invHeight*7/14, side, side, this);
+  	    
+		//////////////on dessine l'icone sélectionnée
+		int xic = posIc[0];
+		int yic = posIc[1];
+		image = getToolkit().getImage("icone_select.jpg");
+		if(posIc[0] == numInvX + 1){
+			g.drawImage(image, invWidth + (1000-invWidth)*1/2, 3*invHeight+ invHeight*7/14, side, side, this);
+		}
+		else{
+			g.drawImage(image, (xic)*invWidth/(numInvX+1)-side/2, 3*invHeight + (yic)*invHeight/(numInvY+1) - side/2, side, side, this);
+		} 
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////<movingMethods>
@@ -178,7 +194,7 @@ public class Map extends JPanel {
         switch(direction){
             //Right
             case 0:
-                if(posIc[0] < numInvX){
+                if(posIc[0] < numInvX + 1){
                     posIc[0] += 1;
                 }
                 break;
